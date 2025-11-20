@@ -1,52 +1,77 @@
-# MERN Stack Capstone Project
+# EventFlow – Event Management Platform
 
-This assignment focuses on designing, developing, and deploying a comprehensive full-stack MERN application that showcases all the skills you've learned throughout the course.
+EventFlow is the capstone MERN application for Week 8: an event management system with registration, ticketing, organizer dashboards, and attendee portals. The repository is organized as a monorepo with `backend`, `frontend`, and `docs` workspaces.
 
-## Assignment Overview
+## Tech Stack
 
-You will:
-1. Plan and design a full-stack MERN application
-2. Develop a robust backend with MongoDB, Express.js, and Node.js
-3. Create an interactive frontend with React.js
-4. Implement testing across the entire application
-5. Deploy the application to production
+- **Backend:** Node.js 18, Express 5, TypeScript, MongoDB (Mongoose), Socket.io, BullMQ, Stripe SDK
+- **Frontend:** React 18 + Vite + TypeScript, Tailwind CSS, Redux Toolkit
+- **Tooling:** Jest, Supertest, Playwright (planned), GitHub Actions, Render/Vercel deployments
 
-## Getting Started
+## Repository Structure
 
-1. Accept the GitHub Classroom assignment
-2. Clone the repository to your local machine
-3. Follow the instructions in the `Week8-Assignment.md` file
-4. Plan, develop, and deploy your capstone project
+```
+.
+├── backend        # Express API + real-time + workers
+├── frontend       # React SPA + attendee/organizer views
+├── docs           # API reference, architecture notes, user guides
+└── Week8-Assignment.md
+```
 
-## Files Included
+## Prerequisites
 
-- `Week8-Assignment.md`: Detailed assignment instructions
+- Node.js ≥ 18
+- npm ≥ 10
+- MongoDB Atlas URI (or local instance)
+- Redis URL (for queues, optional during local dev)
+- Stripe test key (optional until checkout is wired)
 
-## Requirements
+## Environment Variables
 
-- Node.js (v18 or higher)
-- MongoDB (local installation or Atlas account)
-- npm or yarn
-- Git and GitHub account
-- Accounts on deployment platforms (Render/Vercel/Netlify/etc.)
+Create `backend/.env` with:
 
-## Project Ideas
+```
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=mongodb://localhost:27017/eventflow
+CLIENT_URL=http://localhost:5173
+JWT_ACCESS_SECRET=replace-with-32-char-secret
+JWT_REFRESH_SECRET=replace-with-32-char-refresh-secret
+STRIPE_SECRET_KEY=sk_test_xxx
+REDIS_URL=redis://localhost:6379
+```
 
-The `Week8-Assignment.md` file includes several project ideas, but you're encouraged to develop your own idea that demonstrates your skills and interests.
+## Backend – API Server
 
-## Submission
+```bash
+cd backend
+npm install
+npm run dev
+```
 
-Your project will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+Key endpoints (all prefixed with `/api/v1`):
 
-1. Commit and push your code regularly
-2. Include comprehensive documentation
-3. Deploy your application and add the live URL to your README.md
-4. Create a video demonstration and include the link in your README.md
+- `GET /health` – service heartbeat
+- `POST /auth/register` – create attendee/organizer
+- `POST /auth/login` – obtain JWT + cookies
+- `GET /events` / `GET /events/:eventId` – public catalogue
+- `POST /events` – organizer creates draft event
+- `POST /events/:eventId/publish` – publish event
+- `POST /orders` – attendee purchases tickets
+- `GET /orders/me` – attendee order history
 
-## Resources
+## Frontend – Vite + React
 
-- [MongoDB Documentation](https://docs.mongodb.com/)
-- [Express.js Documentation](https://expressjs.com/)
-- [React Documentation](https://react.dev/)
-- [Node.js Documentation](https://nodejs.org/en/docs/)
-- [GitHub Classroom Guide](https://docs.github.com/en/education/manage-coursework-with-github-classroom) 
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The landing page currently renders a marketing overview and mocked event cards. Upcoming tasks will connect it to the live API, add authentication, and build organizer/attendee dashboards.
+
+## Documentation & Deliverables
+
+- `Week8-Assignment.md` – detailed requirements
+- `docs/` – living documentation (API, user guide, architecture)
+- Final submission will include deployment links, test coverage, and a recorded walkthrough per assignment instructions.
